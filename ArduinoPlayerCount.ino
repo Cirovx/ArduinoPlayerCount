@@ -6,6 +6,7 @@ char serverAddress[] = "192.168.1.105";
 int port = 8080;
 uint8_t mac[6] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05};
 int maximumPlayers = 0;
+int buzzerPin = 3;
 
 EthernetClient client;
 HttpClient httpClient = HttpClient(client, serverAddress, port);
@@ -16,10 +17,12 @@ void setup() {
   Ethernet.init(10);  
   Ethernet.begin(mac);
   lcd.begin(16, 2);
+  pinMode(buzzerPin, OUTPUT);
 }
 
 void loop(){ 
-  
+
+  analogWrite(buzzerPin, 255);
   httpClient.get("/DataProvider/");
   int responseCode = httpClient.responseStatusCode();
   String response = httpClient.responseBody();
@@ -33,7 +36,16 @@ void loop(){
   }
 
   if(online.toInt() > maximumPlayers){
+    
     maximumPlayers = online.toInt();
+    
+    for(int i = 0; i < 3;i++){
+      analogWrite(buzzerPin, 0);
+      delay(50);
+      analogWrite(buzzerPin, 255);
+      delay(100);
+    }
+    
   }
 
   lcd.clear();
