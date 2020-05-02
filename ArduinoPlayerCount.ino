@@ -5,6 +5,7 @@
 char serverAddress[] = "192.168.1.105";  
 int port = 8080;
 uint8_t mac[6] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05};
+int maximumPlayers = 0;
 
 EthernetClient client;
 HttpClient httpClient = HttpClient(client, serverAddress, port);
@@ -31,11 +32,17 @@ void loop(){
       Serial.println(responseCode); 
   }
 
-  Serial.println(online);
+  if(online.toInt() > maximumPlayers){
+    maximumPlayers = online.toInt();
+  }
+
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Online: ");
   lcd.print(online);
+  lcd.setCursor(0, 1);
+  lcd.print("Recorde: ");
+  lcd.print(maximumPlayers);
   
   delay(1000);
 }
