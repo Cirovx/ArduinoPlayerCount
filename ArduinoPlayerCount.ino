@@ -14,9 +14,13 @@ LiquidCrystal lcd(9, 8, 7, 6, 5,4);
 
 void setup() {
   Serial.begin(9600);
+  lcd.begin(16, 2);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Conectando...");
+  
   Ethernet.init(10);  
   Ethernet.begin(mac);
-  lcd.begin(16, 2);
   pinMode(buzzerPin, OUTPUT);
 }
 
